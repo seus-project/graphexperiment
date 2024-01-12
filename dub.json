@@ -1,0 +1,11 @@
+{
+	"authors": [
+		"Bastiaan Veelo"
+	],
+	"copyright": "Copyright © 2024, SARC B.V.",
+	"description": "Exploring the usefulness of a graph database as the implementation foundation of the SEUS data model.",
+	"license": "BSL-1.0",
+	"name": "graphexperiment",
+    "COMMENT": "Work around https://issues.dlang.org/show_bug.cgi?id=23209",
+    "dflags": ["-allinst"]
+}
