@@ -1,7 +1,17 @@
+'use strict';
 
-db._createDatabase("seus");
+const db = require('@arangodb').db;
+const databaseName = 'seus';
 
-var users = require("@arangodb/users");
-
-users.save(`${process.env.SEUS_USERNAME}`, `${process.env.SEUS_PASSWORD}`);
-users.grantDatabase(`${process.env.SEUS_USERNAME}`, "seus");
+// Create a new database (remove if the previous exists)
+if (db._databases().includes(databaseName)) {
+    db._dropDatabase(databaseName);
+}
+db._createDatabase(
+    databaseName, 
+    {},
+    [{ 
+        username: process.env.SEUS_USERNAME, 
+        passwd: process.env.SEUS_PASSWORD,
+        active: true
+    }]);
