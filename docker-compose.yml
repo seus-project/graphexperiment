@@ -1,0 +1,19 @@
+version: '3.7' # check the correct version to be use here
+services:
+  arangodb:
+    build:
+      context: db/arangodb/
+      dockerfile: Dockerfile
+    environment:
+      - SEUS_USERNAME=user
+      - SEUS_PASSWORD=v
+      - ARANGO_ROOT_PASSWORD=x
+    ports:
+      - 8529:8529
+    volumes:
+      - arangodb_data_container:/var/lib/arangodb3
+      - arangodb_apps_data_container:/var/lib/arangodb3-apps
+
+volumes:
+  arangodb_data_container:
+  arangodb_apps_data_container:
