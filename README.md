@@ -2,7 +2,7 @@
 
 Exploring the usefulness of a graph database as the implementation foundation of the SEUS data model.
 
-*THIS MAY BECOME A PUBLIC REPOSITORY.* Do not commit sensitive information.
+*THIS IS A PUBLIC REPOSITORY.* Do not commit sensitive information.
 
 ## Installation
 
