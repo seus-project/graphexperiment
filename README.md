@@ -8,9 +8,9 @@ Exploring the usefulness of a graph database as the implementation foundation of
 
 To run this repo you'll need docker installed.
 
-* [Windows](https://docs.docker.com/windows/started)
-* [OS X](https://docs.docker.com/mac/started/)
-* [Linux](https://docs.docker.com/linux/started/)
+* [Windows](https://docs.docker.com/desktop/install/windows-install/)
+* [OS X](https://docs.docker.com/desktop/install/mac-install/)
+* [Linux](https://docs.docker.com/desktop/install/linux-install/)
 
 ## Configuration
 
