@@ -1,71 +1,41 @@
-# graphexperiment
+# Graph Experiment
 
-Exploring the usefulness of a graph database as the implementation foundation of the SEUS data model.
+Exploring the usefulness of a graph database as the implementation foundation of the SEUS data model. The current version uses docker containers to run the experiment.
 
-*THIS MAY BECOME A PUBLIC REPOSITORY.* Do not commit sensitive information.
+> ``⚠`` *THIS MAY BECOME A PUBLIC REPOSITORY.* Do not commit sensitive information.
 
-## Installation
+## Prerequisites
 
-### DBMS
+To run this repo you'll need docker installed.
 
-This experiment builds on the ArangoDB database management system. Below are the instructions for installing the open-source community edition of ArangoDB on [Ubuntu](https://ubuntu.com/download/server) 20.04. [Other systems are supported](https://arangodb.com/download-major/). Alternatively, a [cloud instance can be configured](https://docs.arangodb.com/3.11/get-started/set-up-a-cloud-instance/) for free for fourteen days.
+* [Windows](https://docs.docker.com/windows/started)
+* [OS X](https://docs.docker.com/mac/started/)
+* [Linux](https://docs.docker.com/linux/started/)
 
-**Assuming `_IP_` is the IP address of the Ubuntu server and `_PW_` is the password used for the database.** The name of the database will be `seus` and the user `root@seus` (hardcoded in this experiment).
+## Configuration
 
-Per [https://arangodb.com/download-major/ubuntu/](https://arangodb.com/download-major/ubuntu/):
+To build a meaningful setup, we start from the [tutorial](https://docs.docker.com/compose/gettingstarted/)
+that Docker put together to illustrate Compose. In our scenario, we create a graph database (`ArangoDB` at this moment) and then we execute a D application to populate the database.
 
-```
-wget -O - https://download.arangodb.com/arangodb311/DEBIAN/Release.key | sudo apt-key add -
-echo 'deb https://download.arangodb.com/arangodb311/DEBIAN/ /' | sudo tee /etc/apt/sources.list.d/arangodb.list
-sudo apt-get install apt-transport-https
-sudo apt-get update
-sudo apt-get install arangodb3=3.11.5-1
-```
+Please read the comments in [docker-compose.yml](./docker-compose.yml) and check the configurations.
 
-Per https://www.liquidweb.com/kb/how-to-install-arangodb-on-ubuntu-20-04/: Log in to the `_system` database and create the `seus` database:
+### Execution
 
-```
-arangosh
-db._createDatabase("seus");
-var users = require("@arangodb/users");
-users.save("root@seus", "_PW_");
-users.grantDatabase("root@seus", "seus");
-exit
+In the project repo root, to instantiate the arangoDB and populate with `d` app ([source here](./apps/d/source/app.d)), execute:
+
+```bash
+docker compose -up -d
 ```
 
-Enable the service:
-```
-sudo systemctl start arangodb3
-sudo systemctl enable arangodb3
+Then, open a browser, navigate to [http://localhost:8529](http://localhost:8529) and use these credentials:
+
+```text
+user: root@seus
+pass: rootseus
 ```
 
-By default, the dashboard is only accessible through localhost. To change that, edit `/etc/arangodb3/arangod.conf`
+> ``⚠`` *This is not expected to be used in production*, and the credentials can be changed in [docker-compose.yaml](./docker-compose.yml#L9)
 
-```
-sudo pico arangod.conf
-```
-and change
-```
-endpoint = tcp://127.0.0.1:8529
-```
-into
-```
-endpoint = tcp://_IP_:8529
-```
-then
-```
-sudo systemctl restart arangodb3
-```
+## License
 
-Browse to `http://_IP_:8529/` and log in as `root@seus`.
-
-### Compiler
-
-The source code in this experiment is written in the [D programming language](https://dlang.org/), and various compilers for all mayor platforms can be downloaded from there. The compilation assumes the presence of package manager Dub, which is included in most D compiler distributions.
-
-## Execution
-
-After the above prerequisites have been met, the experiment is run by invoking
-```
-dub run -- --pw="_PW_" --ip=_IP_
-```
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
