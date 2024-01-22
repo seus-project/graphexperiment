@@ -5,8 +5,8 @@ services:
       context: db/arangodb/
       dockerfile: Dockerfile
     environment:
-      - SEUS_USERNAME=user
-      - SEUS_PASSWORD=v
+      - SEUS_USERNAME=root@seus
+      - SEUS_PASSWORD=rootseus
       - ARANGO_ROOT_PASSWORD=x
     ports:
       - 8529:8529
