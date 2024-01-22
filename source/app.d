@@ -2,7 +2,7 @@ import  std.format, std.net.curl, std.stdio;
 
 import core.time;
 
-string api;
+string url;
 
 void main(string[] args)
 {
@@ -30,7 +30,7 @@ void main(string[] args)
         return;
     }
 
-    api = "http://" ~ IP ~ ":" ~ port ~ "/_db/" ~ database ~ "/_api";
+    url = "http://" ~ IP ~ ":" ~ port ~ "/_db/" ~ database;
 
     auto http = HTTP();
     http.authenticationMethod = HTTP.AuthMethod.basic;
@@ -49,6 +49,9 @@ void main(string[] args)
 
     http.moveBulkhead("B4", 44.7);
     printCompartmentBoundaries(http.listCompartments);
+
+    assert(http.getBulkheadPosition("B4") == 44.7);
+
 }
 
 // https://docs.arangodb.com/3.11/develop/http-api/graphs/named-graphs/#drop-a-graph
@@ -59,7 +62,7 @@ void dropGraph(ref HTTP http, string name)
         import std.json;
 
         bool found = false;
-        http.url = api ~ "/gharial/";
+        http.url = url ~ "/_api/gharial/";
         http.method = HTTP.Method.get;
         http.onReceive = (ubyte[] data)
         {
@@ -78,7 +81,7 @@ void dropGraph(ref HTTP http, string name)
 
     if (graphExists(http, name))
     {
-        http.url = api ~ "/gharial/" ~ name ~ "?dropCollections=true";
+        http.url = url ~ "/_api/gharial/" ~ name ~ "?dropCollections=true";
         http.method = HTTP.Method.del;
         http.perform;
     }
@@ -87,7 +90,7 @@ void dropGraph(ref HTTP http, string name)
 /// https://docs.arangodb.com/3.11/develop/http-api/graphs/named-graphs/#create-a-graph
 void createGraph(ref HTTP http, string name)
 {
-    http.url = api ~ "/gharial";
+    http.url = url ~ "/_api/gharial";
     http.method = HTTP.Method.post;
     http.setPostData(format!q"JSON
 {
@@ -200,7 +203,7 @@ void fillGraph(ref HTTP http, int numberOfBulkheads, int panelsPerBulkhead)
 );
 
     http.method = HTTP.Method.post;
-    http.url = api ~ "/cursor";
+    http.url = url ~ "/_api/cursor";
     http.setPostData(format!(
         `{` ~ 
             `"query": "%s",` ~
@@ -245,6 +248,21 @@ void printCompartmentBoundaries(double[][string] compartmentBounds)
         writeln(format!"Compartment \"%s\" is bounded by bulkeheads at positions %s"(key, compartmentBounds[key]));
 }
 
+double getBulkheadPosition(ref HTTP http, string name)
+{
+    http.url = url ~ "/bulkhead_position/bulkhead_position/" ~ name;
+    double position;
+    http.onReceive = (ubyte[] data) {
+        import std.format.read;
+        formattedRead(cast(string) data, "[%g]", position);
+        return data.length;
+    };
+    http.method = HTTP.Method.get;
+    http.perform;
+    http.dataToConsole;
+    return position;
+}
+
 void moveBulkhead(ref HTTP http, string name, double pos)
 {
     http.performAql(format!(`FOR b IN Bulkhead ` ~
@@ -255,7 +273,7 @@ void moveBulkhead(ref HTTP http, string name, double pos)
 
 void printApiVersion(ref HTTP http)
 {
-    http.url = api ~ "/version";
+    http.url = url ~ "/_api/version";
     http.method = HTTP.Method.get;
     http.perform;
 }
@@ -271,7 +289,7 @@ void performAql(ref HTTP http, string aql)
     import std.datetime.stopwatch;
 
     http.method = HTTP.Method.post;
-    http.url = api ~ "/cursor";
+    http.url = url ~ "/_api/cursor";
     http.setPostData(`{"query":"` ~ aql ~ `"}`, "application/json");
     auto sw = StopWatch(AutoStart.yes);
     http.perform;

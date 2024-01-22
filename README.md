@@ -59,6 +59,10 @@ sudo systemctl restart arangodb3
 
 Browse to `http://_IP_:8529/` and log in as `root@seus`.
 
+### Foxx
+
+Foxx services need to be installed manually for now. See [foxx/README.md](foxx/README.md).
+
 ### Compiler
 
 The source code in this experiment is written in the [D programming language](https://dlang.org/), and various compilers for all mayor platforms can be downloaded from there. The compilation assumes the presence of package manager Dub, which is included in most D compiler distributions.
