@@ -1,5 +1,6 @@
-version: '3.7' # check the correct version to be use here
+version: '3.8'
 services:
+  # Databases
   arangodb:
     build:
       context: db/arangodb/
@@ -7,12 +8,37 @@ services:
     environment:
       - SEUS_USERNAME=root@seus
       - SEUS_PASSWORD=rootseus
+      - SEUS_DB_NAME=seus
       - ARANGO_ROOT_PASSWORD=x
     ports:
       - 8529:8529
+    networks:
+      - graph-network
     volumes:
       - arangodb_data_container:/var/lib/arangodb3
       - arangodb_apps_data_container:/var/lib/arangodb3-apps
+    healthcheck:
+      test: ["CMD", "curl -u root:x -X GET http://localhost:8529/_api/version || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+
+  # Apps
+  # D application
+  d_app:
+    build:
+      context: apps/d/
+      dockerfile: Dockerfile
+    depends_on:
+      - arangodb
+    networks:
+      - graph-network
+    # TODO: change to use env variables and wait for arangodb become available
+    command: bash -c "dub run -- --pw=rootseus --ip=arangodb && dub run -- --pw=rootseus --ip=arangodb"
+
+networks:
+  graph-network:
 
 volumes:
   arangodb_data_container:
