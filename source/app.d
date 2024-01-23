@@ -244,7 +244,9 @@ void printCompartmentBoundaries(double[][string] compartmentBounds)
 {
     import std.algorithm;
 
-    foreach (key; compartmentBounds.keys.sort!((a, b) => compartmentBounds[a][0] < compartmentBounds[b][0]))
+    foreach (key; compartmentBounds.keys.sort!((a, b) =>
+                compartmentBounds[a][0] < compartmentBounds[b][0] ||
+                (compartmentBounds[a][0] == compartmentBounds[b][0] && compartmentBounds[a].length < compartmentBounds[b].length)))
         writeln(format!"Compartment \"%s\" is bounded by bulkeheads at positions %s"(key, compartmentBounds[key]));
 }
 
