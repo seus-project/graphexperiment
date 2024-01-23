@@ -250,6 +250,8 @@ void printCompartmentBoundaries(double[][string] compartmentBounds)
 
 double getBulkheadPosition(ref HTTP http, string name)
 {
+    import std.datetime.stopwatch;
+
     http.url = url ~ "/bulkhead_position/" ~ name;
     double position;
     http.onReceive = (ubyte[] data) {
@@ -258,7 +260,9 @@ double getBulkheadPosition(ref HTTP http, string name)
         return data.length;
     };
     http.method = HTTP.Method.get;
+    auto sw = StopWatch(AutoStart.yes);
     http.perform;
+    writeln("\tIt takes ", sw.peek, " to query " ~ url ~ "/bulkhead_position/" ~ name);
     http.dataToConsole;
     return position;
 }
