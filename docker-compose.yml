@@ -27,15 +27,18 @@ services:
   # Apps
   # D application
   d_app:
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     build:
-      context: apps/d/
+      context: .
       dockerfile: Dockerfile
     depends_on:
       - arangodb
     networks:
       - graph-network
+    entrypoint: /bin/bash
     # TODO: change to use env variables and wait for arangodb become available
-    command: bash -c "dub run -- --pw=rootseus --ip=arangodb && dub run -- --pw=rootseus --ip=arangodb"
+    # command: bash -c "dub run -- --pw=rootseus --ip=arangodb && dub run -- --pw=rootseus --ip=arangodb"
 
 networks:
   graph-network:

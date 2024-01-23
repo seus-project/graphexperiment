@@ -24,7 +24,7 @@ Please read the comments in [docker-compose.yml](./docker-compose.yml) and check
 In the project repo root, to instantiate the arangoDB and populate with `d` app ([source here](./apps/d/source/app.d)), execute:
 
 ```bash
-docker compose -up -d
+docker compose up -d
 ```
 
 Then, open a browser, navigate to [http://localhost:8529](http://localhost:8529) and use these credentials:
