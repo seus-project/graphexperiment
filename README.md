@@ -19,7 +19,7 @@ wget -O - https://download.arangodb.com/arangodb311/DEBIAN/Release.key | sudo ap
 echo 'deb https://download.arangodb.com/arangodb311/DEBIAN/ /' | sudo tee /etc/apt/sources.list.d/arangodb.list
 sudo apt-get install apt-transport-https
 sudo apt-get update
-sudo apt-get install arangodb3=3.11.5-1
+sudo apt-get install arangodb3=3.11.6-1
 ```
 
 Per https://www.liquidweb.com/kb/how-to-install-arangodb-on-ubuntu-20-04/: Log in to the `_system` database and create the `seus` database:
