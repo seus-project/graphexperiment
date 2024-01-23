@@ -97,48 +97,48 @@ void createGraph(ref HTTP http, string name)
   "name": "%s",
   "edgeDefinitions": [
     {
-      "collection": "BulkheadToCadmatic",
+      "collection": "BulkheadToEngineering",
       "from": [
         "Bulkhead"
       ],
       "to": [
-        "Cadmatic_Bulkhead"
+        "Engineering_Bulkhead"
       ]
     },
     {
-      "collection": "BulkheadToPias",
+      "collection": "BulkheadToDesign",
       "from": [
         "Bulkhead"
       ],
       "to": [
-        "Pias_Bulkhead"
+        "Design_Bulkhead"
       ]
     },
     {
-      "collection": "Cadmatic_BulkheadHasPanel",
+      "collection": "Engineering_BulkheadHasPanel",
       "from": [
-        "Cadmatic_Bulkhead"
+        "Engineering_Bulkhead"
       ],
       "to": [
-        "Cadmatic_Panel"
+        "Engineering_Panel"
       ]
     },
     {
-      "collection": "Cadmatic_PanelHasStiffener",
+      "collection": "Engineering_PanelHasStiffener",
       "from": [
-        "Cadmatic_Panel"
+        "Engineering_Panel"
       ],
       "to": [
-        "Cadmatic_Stiffener"
+        "Engineering_Stiffener"
       ]
     },
     {
-      "collection": "Pias_BulkheadAdjacentCompartment",
+      "collection": "Design_BulkheadAdjacentCompartment",
       "from": [
-        "Pias_Bulkhead"
+        "Design_Bulkhead"
       ],
       "to": [
-        "Pias_Compartment"
+        "Design_Compartment"
       ]
     }
   ]
@@ -152,54 +152,54 @@ void fillGraph(ref HTTP http, int numberOfBulkheads, int panelsPerBulkhead)
     import std.conv, std.datetime.stopwatch;
 
     auto aql = text(
-// Add conceptual bulkheads with edges to Pias and Cadmatic specialisations.
+// Add conceptual bulkheads with edges to Design and Engineering specialisations.
 "LET b_ids = ( ",
     "FOR i IN 1 .. @numberOfBulkheads ",
         "LET b_id = ( ",
             "INSERT { name: CONCAT('B', i) } INTO Bulkhead ",
             "RETURN NEW._id ",
         ") ",
-        "LET pias_b_id = ( ",
-            "INSERT { position: 10 * i } INTO Pias_Bulkhead ",
+        "LET design_b_id = ( ",
+            "INSERT { position: 10 * i } INTO Design_Bulkhead ",
             "RETURN NEW._id ",
         ") ",
-        "LET cadmatic_b_id = ( ",
-            "INSERT {  } INTO Cadmatic_Bulkhead ",
+        "LET engineering_b_id = ( ",
+            "INSERT {  } INTO Engineering_Bulkhead ",
             "RETURN NEW._id ",
         ") ",
-        "INSERT { '_from': b_id[0], '_to': pias_b_id[0] } INTO BulkheadToPias ",
-        "INSERT { '_from': b_id[0], '_to': cadmatic_b_id[0] } INTO BulkheadToCadmatic ",
-        "RETURN [ pias_b_id, cadmatic_b_id ] ",
+        "INSERT { '_from': b_id[0], '_to': design_b_id[0] } INTO BulkheadToDesign ",
+        "INSERT { '_from': b_id[0], '_to': engineering_b_id[0] } INTO BulkheadToEngineering ",
+        "RETURN [ design_b_id, engineering_b_id ] ",
 ") ",
-// Add panels to cadmatic bulkheads
+// Add panels to Engineering bulkheads
 "LET p_ids = ( ",
     "FOR b_id IN b_ids ",
         "FOR j IN 1 .. @panelsPerBulkhead ",
             "LET p1_ids = ( ",
-                "INSERT { } INTO Cadmatic_Panel ",
+                "INSERT { } INTO Engineering_Panel ",
                 "RETURN NEW._id ",
             ") ",
-            "INSERT { '_from': b_id[1][0], '_to': p1_ids[0] } INTO Cadmatic_BulkheadHasPanel ",
+            "INSERT { '_from': b_id[1][0], '_to': p1_ids[0] } INTO Engineering_BulkheadHasPanel ",
 ") ",
 // Add compartments with edges from bounding bulkheads
-"LET pias_c_ids = ( ",
+"LET design_c_ids = ( ",
     "FOR i IN 1 .. @numberOfBulkheads + 1 ",
-        "INSERT { name: CONCAT('C', i) } INTO Pias_Compartment ",
+        "INSERT { name: CONCAT('C', i) } INTO Design_Compartment ",
         "RETURN NEW._id ",
 ") ",
 "LET aft = ( ",
     "FOR i IN 0 .. @numberOfBulkheads-1 ",
-        "RETURN { '_from': b_ids[i][0][0], '_to': pias_c_ids[i] } ",
+        "RETURN { '_from': b_ids[i][0][0], '_to': design_c_ids[i] } ",
 ") ",
 "LET fore = ( ",
     "FOR i IN 0 .. @numberOfBulkheads-1 ",
-        "RETURN { '_from': b_ids[i][0][0], '_to': pias_c_ids[i+1] } ",
+        "RETURN { '_from': b_ids[i][0][0], '_to': design_c_ids[i+1] } ",
 ") ",
 "LET adjacents = ( ",
     "RETURN FLATTEN([aft, fore]) ",
 ") ",
 "FOR adjacent IN adjacents[0] ",
-    "INSERT adjacent INTO Pias_BulkheadAdjacentCompartment ",
+    "INSERT adjacent INTO Design_BulkheadAdjacentCompartment ",
 );
 
     http.method = HTTP.Method.post;
@@ -228,8 +228,8 @@ double[][string] listCompartments(ref HTTP http)
         app ~= data;
         return data.length;
     };
-    http.performAql(`FOR c IN Pias_Compartment ` ~
-                        `FOR pb IN INBOUND c Pias_BulkheadAdjacentCompartment ` ~
+    http.performAql(`FOR c IN Design_Compartment ` ~
+                        `FOR pb IN INBOUND c Design_BulkheadAdjacentCompartment ` ~
                             `RETURN [ c.name, pb.position ] `);
     http.dataToConsole;
 
@@ -273,8 +273,8 @@ void moveBulkhead(ref HTTP http, string name, double pos)
 {
     http.performAql(format!(`FOR b IN Bulkhead ` ~
                                 `FILTER b.name == '%s' LIMIT 1 ` ~
-                                `FOR pb IN OUTBOUND b BulkheadToPias ` ~
-                                    `UPDATE pb WITH { position: %f } IN Pias_Bulkhead RETURN NEW`)(name, pos));
+                                `FOR pb IN OUTBOUND b BulkheadToDesign ` ~
+                                    `UPDATE pb WITH { position: %f } IN Design_Bulkhead RETURN NEW`)(name, pos));
 }
 
 void printApiVersion(ref HTTP http)
