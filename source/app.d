@@ -250,7 +250,7 @@ void printCompartmentBoundaries(double[][string] compartmentBounds)
 
 double getBulkheadPosition(ref HTTP http, string name)
 {
-    http.url = url ~ "/bulkhead_position/bulkhead_position/" ~ name;
+    http.url = url ~ "/bulkhead_position/" ~ name;
     double position;
     http.onReceive = (ubyte[] data) {
         import std.format.read;

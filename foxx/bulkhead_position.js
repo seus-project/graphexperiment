@@ -7,7 +7,7 @@ module.context.use(router);
 const arangodb = require("@arangodb");
 const db = arangodb.db;
 
-router.get('/bulkhead_position/:key', function (req, res) {
+router.get('/:key', function (req, res) {
   res.set("Content-Type", "text/plain; charset=utf-8");
 
   const key = req.param("key");
