@@ -1,10 +1,12 @@
-# graphexperiment
+# Graph Experiment
 
 Exploring the usefulness of a graph database as the implementation foundation of the SEUS data model.
 
 *THIS IS A PUBLIC REPOSITORY.* Do not commit sensitive information.
 
 ## Installation
+
+For an automated installation using Docker, see [docker/README.md](docker/README.md). The remainder of this section describes manual installation.
 
 ### DBMS
 
