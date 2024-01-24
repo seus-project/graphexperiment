@@ -25,21 +25,21 @@ services:
       retries: 5
       start_period: 5s
 
-  # Apps
-  # D application
-  d_app:
+  # environment
+  # D environment, in order to compile D code
+  d_env:
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     build:
-      context: ..
-      dockerfile: docker/d-app/Dockerfile
+      context: env/d
+      dockerfile: Dockerfile
     depends_on:
       - arangodb
+    volumes:
+      - ./../:/graphexperiment/
     networks:
       - graph-network
-    entrypoint: /bin/bash
-    # TODO: change to use env variables and wait for arangodb become available
-    # command: bash -c "dub run -- --pw=rootseus --ip=arangodb && dub run -- --pw=rootseus --ip=arangodb"
+    entrypoint: ["/bin/bash"]
 
 networks:
   graph-network:
