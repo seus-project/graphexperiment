@@ -1,4 +1,5 @@
 version: '3.8'
+name: graphexperiment
 services:
   # Databases
   arangodb:
@@ -30,8 +31,8 @@ services:
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/d-app/Dockerfile
     depends_on:
       - arangodb
     networks:
