@@ -2,7 +2,7 @@
 
 Exploring the usefulness of a graph database as the implementation foundation of the SEUS data model.
 
-> ``⚠`` *THIS MAY BECOME A PUBLIC REPOSITORY.* Do not commit sensitive information.
+``⚠`` *THIS IS A PUBLIC REPOSITORY.* Do not commit sensitive information.
 
 ## Installation
 
@@ -16,7 +16,7 @@ This experiment builds on the ArangoDB database management system. Below are the
 
 Per [https://arangodb.com/download-major/ubuntu/](https://arangodb.com/download-major/ubuntu/):
 
-```bash
+```shell
 wget -O - https://download.arangodb.com/arangodb311/DEBIAN/Release.key | sudo apt-key add -
 echo 'deb https://download.arangodb.com/arangodb311/DEBIAN/ /' | sudo tee /etc/apt/sources.list.d/arangodb.list
 sudo apt-get install apt-transport-https
@@ -26,7 +26,7 @@ sudo apt-get install arangodb3=3.11.6-1
 
 Per <https://www.liquidweb.com/kb/how-to-install-arangodb-on-ubuntu-20-04/>: Log in to the `_system` database and create the `seus` database:
 
-```bash
+```shell
 arangosh
 db._createDatabase("seus");
 var users = require("@arangodb/users");
@@ -37,32 +37,32 @@ exit
 
 Enable the service:
 
-```bash
+```shell
 sudo systemctl start arangodb3
 sudo systemctl enable arangodb3
 ```
 
 By default, the dashboard is only accessible through localhost. To change that, edit `/etc/arangodb3/arangod.conf`
 
-```bash
+```shell
 sudo pico arangod.conf
 ```
 
 and change
 
-```bash
+```shell
 endpoint = tcp://127.0.0.1:8529
 ```
 
 into
 
-```bash
+```shell
 endpoint = tcp://_IP_:8529
 ```
 
 then
 
-```bash
+```shell
 sudo systemctl restart arangodb3
 ```
 
@@ -80,6 +80,6 @@ The source code in this experiment is written in the [D programming language](ht
 
 After the above prerequisites have been met, the experiment is run by invoking
 
-```bash
+```shell
 dub run -- --pw="_PW_" --ip=_IP_
 ```
