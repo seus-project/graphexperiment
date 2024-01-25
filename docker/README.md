@@ -4,14 +4,12 @@ These are the instructions for building a Docker project that contains everythin
 
 ## Prerequisites
 
-To run this repo you'll need Docker installed.
+You'll need Docker Desktop installed.
 
 * [Windows](https://docs.docker.com/desktop/install/windows-install/)
   * On Windows the commands below need to be executed in Powershell.
 * [OS X](https://docs.docker.com/desktop/install/mac-install/)
 * [Linux](https://docs.docker.com/desktop/install/linux-install/)
-
-The default configuration should work out of the box. You may consult the [tutorial](https://docs.docker.com/compose/gettingstarted/) if needed.
 
 ## Configuration
 
@@ -24,11 +22,15 @@ Please read the comments in [docker-compose.yml](./docker-compose.yml) and check
 
 ### Startup
 
+Make sure the Docker Engine is running. This can be done by opening the Docker Desktop (see above).
+
 In the `docker` subdirectory of the repo root, execute:
 
 ```bash
 docker compose up -d
 ```
+
+This may take considerable time initially, subsequent startups happen a lot quicker.
 
 ### Database web interface
 
@@ -40,6 +42,10 @@ pass: rootseus
 ```
 
 ⚠ *This is not expected to be used in production*, and the credentials can be changed in [docker-compose.yaml](./docker-compose.yml#L9)
+
+### Foxx
+
+Foxx services need to be installed manually for now. See [../foxx/README.md](../foxx/README.md).
 
 ### Running the code
 
