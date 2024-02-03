@@ -5,3 +5,4 @@ LABEL maintainer="Fernando Luz <fernando.luz@ntnu.no>"
 RUN apk add --no-cache curl=8.5.0-r0
 
 COPY create_seus_db.js /docker-entrypoint-initdb.d
+COPY create_shakespeare_db.js /docker-entrypoint-initdb.d

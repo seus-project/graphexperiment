@@ -16,6 +16,7 @@ services:
     networks:
       - graph-network
     volumes:
+      - ../data:/data
       - arangodb_data_container:/var/lib/arangodb3
       - arangodb_apps_data_container:/var/lib/arangodb3-apps
     healthcheck:
