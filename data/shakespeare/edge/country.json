@@ -1,4 +1,0 @@
-[
-    {"_from": "county/county0", "_to": "country/country0" },
-    {"_from": "city/city1", "_to": "country/country0" }
-]

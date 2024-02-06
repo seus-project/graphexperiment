@@ -7,7 +7,7 @@ These are the instructions for building a Docker project that contains everythin
 You'll need Docker Desktop installed.
 
 * [Windows](https://docs.docker.com/desktop/install/windows-install/)
-  * On Windows the commands below need to be executed in Powershell.
+  * On Windows, the commands below need to be executed in Powershell.
 * [OS X](https://docs.docker.com/desktop/install/mac-install/)
 * [Linux](https://docs.docker.com/desktop/install/linux-install/)
 
@@ -30,7 +30,7 @@ In the `docker` subdirectory of the repo root, execute:
 docker compose up -d
 ```
 
-This may take considerable time initially, subsequent startups happen a lot quicker.
+This may take considerable time initially, but subsequent startups happen a lot quicker.
 
 ### Database web interface
 
@@ -65,7 +65,7 @@ At the shell prompt, the following will compile and run the code.
 dub run -- --pw=rootseus --ip=arangodb
 ```
 
-#### Shutdown
+### Shutdown
 
 ```shell
 docker compose down

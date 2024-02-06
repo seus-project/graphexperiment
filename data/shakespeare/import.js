@@ -4,7 +4,6 @@ const db = require('@arangodb').db;
 const databaseName = 'shakespeare';
 const user = 'shake';
 const passwd = 'shake1234';
-const rel_path = '/../data/shakespeare';
 
 // Create a new database (remove if the previous exists)
 if (db._databases().includes(databaseName)) {
@@ -23,7 +22,6 @@ db._createDatabase(
 db._useDatabase(databaseName);
 
 // Create all node collections used in Shakespeare example
-// 
 // Each collection represents a node type
 db._create("author");
 db._create("play");
@@ -39,7 +37,6 @@ db._create("county");
 db._create("country");
 
 // Create all edge collections used in Shakespeare example
-// 
 // Each collection represents a edge relation between different node types
 db._createEdgeCollection("WROTE_PLAY");
 db._createEdgeCollection("PRODUCTION_OF");
@@ -55,44 +52,42 @@ db._createEdgeCollection("COUNTY");
 db._createEdgeCollection("COUNTRY");
 db._createEdgeCollection("BORN_IN");
 
-// Import documents to collections
-const internal = require("internal")
-
 // Nodes
-db.author.save(internal.load(__dirname + rel_path + "/node/author.json"));
-db.play.save(internal.load(__dirname + rel_path + "/node/play.json"));
-db.production.save(internal.load(__dirname + rel_path + "/node/production.json"));
-db.user.save(internal.load(__dirname + rel_path + "/node/user.json"));
-db.review.save(internal.load(__dirname + rel_path + "/node/review.json"));
-db.company.save(internal.load(__dirname + rel_path + "/node/company.json"));
-db.performance.save(internal.load(__dirname + rel_path + "/node/performance.json"));
-db.venue.save(internal.load(__dirname + rel_path + "/node/venue.json"));
-db.street.save(internal.load(__dirname + rel_path + "/node/street.json"));
-db.city.save(internal.load(__dirname + rel_path + "/node/city.json"));
-db.county.save(internal.load(__dirname + rel_path + "/node/county.json"));
-db.country.save(internal.load(__dirname + rel_path + "/node/country.json"));
+const nodes = require(__dirname + "/nodes.json");
+db.author.save(nodes["author"]);
+db.city.save(nodes["city"]);
+db.company.save(nodes["company"]);
+db.country.save(nodes["country"]);
+db.county.save(nodes["county"]);
+db.performance.save(nodes["performance"]);
+db.play.save(nodes["play"]);
+db.production.save(nodes["production"]);
+db.review.save(nodes["review"]);
+db.street.save(nodes["street"]);
+db.user.save(nodes["user"]);
+db.venue.save(nodes["venue"]);
 
 // Edges
-db.WROTE_PLAY.save(internal.load(__dirname + rel_path + "/edge/wrotePlay.json"));
-db.PRODUCTION_OF.save(internal.load(__dirname + rel_path + "/edge/productionOf.json"));
-db.WROTE_REVIEW.save(internal.load(__dirname + rel_path + "/edge/wroteReview.json"));
-db.REVIEW_OF.save(internal.load(__dirname + rel_path + "/edge/reviewOf.json"));
-db.PRODUCED.save(internal.load(__dirname + rel_path + "/edge/produced.json"));
-db.PERFORMANCE_OF.save(internal.load(__dirname + rel_path + "/edge/performanceOf.json"));
-db.VENUE.save(internal.load(__dirname + rel_path + "/edge/venue.json"));
-db.BASED_IN.save(internal.load(__dirname + rel_path + "/edge/basedIn.json"));
-db.CITY.save(internal.load(__dirname + rel_path + "/edge/city.json"));
-db.STREET.save(internal.load(__dirname + rel_path + "/edge/street.json"));
-db.COUNTY.save(internal.load(__dirname + rel_path + "/edge/county.json"));
-db.COUNTRY.save(internal.load(__dirname + rel_path + "/edge/country.json"));
-db.BORN_IN.save(internal.load(__dirname + rel_path + "/edge/bornIn.json"));
+const edges = require(__dirname + "/edges.json");
+db.BASED_IN.save(edges["basedIn"]);
+db.BORN_IN.save(edges["bornIn"]);
+db.CITY.save(edges["city"]);
+db.COUNTRY.save(edges["country"]);
+db.COUNTY.save(edges["county"]);
+db.PERFORMANCE_OF.save(edges["performanceOf"]);
+db.PRODUCED.save(edges["produced"]);
+db.PRODUCTION_OF.save(edges["productionOf"]);
+db.REVIEW_OF.save(edges["reviewOf"]);
+db.STREET.save(edges["street"]);
+db.VENUE.save(edges["venue"]);
+db.WROTE_PLAY.save(edges["wrotePlay"]);
+db.WROTE_REVIEW.save(edges["wroteReview"]);
 
-
-// Create views?
+// Create views
 var graph_module =  require("org/arangodb/general-graph");
 var graph = graph_module._create("Shakespeare_full");
 
-//Add top level documents
+// Add top level documents
 graph._addVertexCollection("author");
 graph._addVertexCollection("play");
 graph._addVertexCollection("production");
