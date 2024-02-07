@@ -1,0 +1,106 @@
+{
+    "basedIn": [
+        {
+            "_from": "company/company0",
+            "_to": "city/city1"
+        }
+    ],
+    "bornIn": [
+        {
+            "_from": "author/author0",
+            "_to": "city/city1"
+        }
+    ],
+    "city": [
+        {
+            "_from": "street/street0",
+            "_to": "city/city0"
+        }
+    ],
+    "country": [
+        {
+            "_from": "county/county0",
+            "_to": "country/country0"
+        },
+        {
+            "_from": "city/city1",
+            "_to": "country/country0"
+        }
+    ],
+    "county": [
+        {
+            "_from": "city/city0",
+            "_to": "county/county0"
+        }
+    ],
+    "performanceOf": [
+        {
+            "_from": "performance/performance0",
+            "_to": "production/production0"
+        },
+        {
+            "_from": "performance/performance1",
+            "_to": "production/production1"
+        }
+    ],
+    "produced": [
+        {
+            "_from": "company/company0",
+            "_to": "production/production0"
+        },
+        {
+            "_from": "company/company0",
+            "_to": "production/production1"
+        }
+    ],
+    "productionOf": [
+        {
+            "_from": "production/production0",
+            "_to": "play/play0"
+        },
+        {
+            "_from": "production/production1",
+            "_to": "play/play1"
+        }
+    ],
+    "reviewOf": [
+        {
+            "_from": "review/review0",
+            "_to": "performance/performance1"
+        }
+    ],
+    "street": [
+        {
+            "_from": "venue/venue0",
+            "_to": "street/street0"
+        }
+    ],
+    "venue": [
+        {
+            "_from": "performance/performance0",
+            "_to": "venue/venue0"
+        },
+        {
+            "_from": "performance/performance1",
+            "_to": "venue/venue0"
+        }
+    ],
+    "wrotePlay": [
+        {
+            "_from": "author/author0",
+            "_to": "play/play0",
+            "year": 1610
+        },
+        {
+            "_from": "author/author0",
+            "_to": "play/play1",
+            "year": 1599
+        }
+    ],
+    "wroteReview": [
+        {
+            "_from": "user/user0",
+            "_to": "review/review0"
+        }
+    ]
+}
